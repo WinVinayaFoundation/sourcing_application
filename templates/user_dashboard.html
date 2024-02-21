@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WVF || Job Portal</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <style>
+        /* Some basic CSS for styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Semi-transparent black background */
+        }
+
+        /* Style for modal content */
+        .modal-content {
+            background-color: #fefefe; /* White background */
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px; /* Adjust the maximum width as needed */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        /* Style for close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        /* Nav Style Starts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #5b0000;
+            padding: 10px 20px;
+            background-color: transparent;
+            backdrop-filter: blur(10px); /* Apply blur effect */
+        }
+        .navbar-logo img {
+            width: 100%;
+            height: auto;
+        }
+        .navbar-logo {
+            margin-right: auto; /* Pushes the logo to the left */
+            font-size: 24px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-links a {
+            color: #5b0000;
+            text-decoration: none;
+            padding: 10px;
+            transition: color 0.3s;
+        }
+
+        .navbar-links a:hover {
+            color: #000000;
+        }
+
+        .navbar-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .navbar-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .navbar-buttons button:hover {
+            background-color: #0056b3;
+        }
+        /* Nav Style Ends */
+        /* Banner styles */
+        .banner {
+            /* background-image: url(https://unsplash.com/photos/low-angle-photo-of-curtain-wall-building-FyD3OWBuXnY); */
+            background-size: cover;
+            background-position: center;
+            height: 150px; /* Adjust the height as needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            margin-top: -10px; /* Adjust the margin to align with the navbar */
+        }
+
+        .banner h1 {
+            font-size: 3rem;
+            /* margin-bottom: 20px; */
+        }
+
+        .banner p {
+            font-size: 1.5rem;
+        }
+        /* about us */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+        .ag-courses_box {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+
+        padding: 50px 0;
+        }
+        .ag-courses_item {
+        -ms-flex-preferred-size: calc(33.33333% - 30px);
+        flex-basis: calc(33.33333% - 30px);
+
+        margin: 0 15px 30px;
+
+        overflow: hidden;
+
+        border-radius: 28px;
+        }
+        .ag-courses-item_link {
+        display: block;
+        padding: 30px 20px;
+        background-color: #121212;
+
+        overflow: hidden;
+
+        position: relative;
+        }
+        .ag-courses-item_link:hover,
+        .ag-courses-item_link:hover .ag-courses-item_date {
+        text-decoration: none;
+        color: #FFF;
+        }
+        .ag-courses-item_link:hover .ag-courses-item_bg {
+        -webkit-transform: scale(10);
+        -ms-transform: scale(10);
+        transform: scale(10);
+        }
+        .ag-courses-item_title {
+        min-height: 87px;
+        margin: 0 0 25px;
+
+        overflow: hidden;
+
+        font-weight: bold;
+        font-size: 30px;
+        color: #FFF;
+
+        z-index: 2;
+        position: relative;
+        }
+        .ag-courses-item_date-box {
+        font-size: 18px;
+        color: #FFF;
+
+        z-index: 2;
+        position: relative;
+        }
+        .ag-courses-item_date {
+        font-weight: bold;
+        color: #f9b234;
+
+        -webkit-transition: color .5s ease;
+        -o-transition: color .5s ease;
+        transition: color .5s ease
+        }
+        .ag-courses-item_bg {
+        height: 128px;
+        width: 128px;
+        background-color: #f9b234;
+
+        z-index: 1;
+        position: absolute;
+        top: -75px;
+        right: -75px;
+
+        border-radius: 50%;
+
+        -webkit-transition: all .5s ease;
+        -o-transition: all .5s ease;
+        transition: all .5s ease;
+        }
+        .ag-courses_item:nth-child(2n) .ag-courses-item_bg {
+        background-color: #3ecd5e;
+        }
+        .ag-courses_item:nth-child(3n) .ag-courses-item_bg {
+        background-color: #e44002;
+        }
+        .ag-courses_item:nth-child(4n) .ag-courses-item_bg {
+        background-color: #952aff;
+        }
+        .ag-courses_item:nth-child(5n) .ag-courses-item_bg {
+        background-color: #cd3e94;
+        }
+        .ag-courses_item:nth-child(6n) .ag-courses-item_bg {
+        background-color: #4c49ea;
+        }
+        @media only screen and (max-width: 979px) {
+        .ag-courses_item {
+            -ms-flex-preferred-size: calc(50% - 30px);
+            flex-basis: calc(50% - 30px);
+        }
+        .ag-courses-item_title {
+            font-size: 24px;
+        }
+        }
+
+        @media only screen and (max-width: 767px) {
+        .ag-format-container {
+            width: 96%;
+        }
+
+        }
+        @media only screen and (max-width: 639px) {
+        .ag-courses_item {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+        }
+        .ag-courses-item_title {
+            min-height: 72px;
+            line-height: 1;
+
+            font-size: 24px;
+        }
+        .ag-courses-item_link {
+            padding: 22px 40px;
+        }
+        .ag-courses-item_date-box {
+            font-size: 16px;
+        }
+        }
+
+        /* dont touch */
+        .para{
+            font-size: medium;
+        }
+        /* dont touch */
+
+        /* footer */
+        .footer {
+            background: rgb(69,61,130);
+            background: radial-gradient(circle, rgba(69,61,130,0.812937675070028) 0%, rgba(91,0,0,0.7008928571428572) 67%);
+            color: #fbfbfb;
+            padding: 20px 0;
+        }
+
+        .footer-columns {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-column {
+            width: calc(25% - 20px); /* Adjust column width as needed */
+            padding: 0 10px;
+        }
+
+        .footer h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin-bottom: 5px;
+        }
+
+        .footer ul {
+            color: white;
+            list-style: none;
+            padding: 0;
+        }
+        .footer a{
+            color: white;
+        }
+        .footer ul li {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .social-links li {
+            color: white;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .social-links li:last-child {
+            margin-right: 0;
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            text-align: center;
+        }
+       
+        /* Style for search container */
+        .search-container {
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Style for search form */
+        #search-form {
+            display: inline-block;
+        }
+
+        /* Style for search input */
+        #search-input {
+            border: none;
+            width: 50%;
+            border-bottom: 1px solid #ccc; /* Add underline */
+            padding: 8px; /* Adjust padding as needed */
+            margin-right: 10px; /* Adjust margin as needed */
+            outline: none; /* Remove default outline */
+        }
+
+        /* Style for select dropdowns */
+        #company-select,
+        #location-select,
+        #hr-name-select {
+            border: none;
+            border-bottom: 1px solid #ccc; /* Add underline */
+            padding: 5px; /* Adjust padding as needed */
+            margin-right: 10px; /* Adjust margin as needed */
+            outline: none; /* Remove default outline */
+            background-color: transparent; /* Make background transparent */
+            -webkit-appearance: none; /* Remove default arrow icon in Chrome/Safari */
+            -moz-appearance: none; /* Remove default arrow icon in Firefox */
+            appearance: none; /* Remove default arrow icon */
+        }
+
+        /* Style for dropdown options */
+        #company-select option,
+        #location-select option,
+        #hr-name-select option {
+            background-color: #fff; /* Change background color of options */
+        }
+
+        /* Style for submit button */
+        #search-form button {
+            border: none;
+            background-color: #007bff; /* Add your desired background color */
+            color: #fff; /* Add your desired text color */
+            padding: 8px 20px; /* Adjust padding as needed */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #search-form button:hover {
+            background-color: #0056b3; /* Add your desired hover background color */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="banner1">
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="static\WVI.png" alt="Logo">
+            </div>
+            <div class="navbar-links">
+                <a href="#">Home</a>
+                <a href="#">About Us</a>
+                <a href="#jobs-section">Jobs</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="navbar-buttons">
+                <button class="Button">Sign out</button>
+            </div>
+        </nav>
+    </header>
+    
+</div>
+<!-- end body section -->
+<section class="banner">
+    <div class="banner-content">
+        <div class="typing-container">
+            <h1 class="typing" style="color: rgb(93, 0, 0);">Welcome to our Job Portal</h1>
+        </div>
+        <p style="color: #000000;">Discover amazing features and services</p>
+    </div>
+</section>
+<!-- Jobs Section -->
+<section class="jobs-section" id="jobs-section">
+    <h2 style="color: #0056b3;font-size: 35px;text-align: center;padding-top: 20px; padding-bottom: 10px;">Specially Handpicked Jobs</h2>
+    <p style="font-size: 20px;text-align: center;padding-top: 10px; ">Finding a job should not be a full-time endeavor.</p>
+    <p style="font-size: 20px;text-align: center;padding-bottom: 50px;">Tell us what you're searching for, and we'll find one for you.</p>
+    
+    <!-- Search and Filter Form -->
+    <div class="search-container">
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search...">
+            <select id="company-select">
+                <option value="">All</option>
+                {% for company in companies %}
+                    <option value="{{ company }}">{{ company }}</option>
+                {% endfor %}
+            </select>
+            
+            <select id="location-select">
+                <option value="">All</option>
+                {% for location in locations %}
+                    <option value="{{ location }}">{{ location }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="job-grid">
+        {% for job in jobs %}
+            <div class="ag-courses_item">
+                <div class="ag-courses-item_link" onclick="openModal1('myModal{{ loop.index }}')">
+                    <div class="ag-courses-item_bg"></div>
+                    <div class="ag-courses-item_title">
+                        <div class="para">
+                            <p>Title: {{ job.title }}</p>
+                            <!-- <p>Description: {{ job.description | truncate(100) }}</p> -->
+                            <p>Company: {{ job.company }}</p>
+                            <p>Created_at: {{ job.created_at }}</p>
+                            <p>Location: {{ job.location }}</p>
+                            <p>Hr name: {{ job.hr_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+<!-- Jobs Section -->
+        {% for job in jobs %}
+        <div id="myModal{{ loop.index }}" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal1('myModal{{ loop.index }}')">&times;</span>
+                <h2>Title: {{ job.title }}</h2>
+                <p>Description: {{ job.description }}</p>
+                <p>Company: {{ job.company }}</p>
+                <p>Created_at: {{ job.created_at }}</p>
+                <p>Location: {{ job.location }}</p>
+                <p>Hr name: {{ job.hr_name }}</p>
+                <button class="apply-button" role="button"><span class="text">apply</span></button>
+                <!-- <button class="apply-button">Apply</button> -->
+            </div>
+        </div>
+        {% endfor %}
+<!-- Jobs Section -->
+<!-- CHatbot -->
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="WVF"
+  agent-id="7c9c6b3e-1386-43b5-aab3-d1e6c3d056fd"
+  language-code="en"
+></df-messenger>
+<!-- FOoter Starts -->
+<footer class="footer">
+    <div class="footer-columns">
+        <div class="footer-column">
+            <h3>Contact Info</h3>
+            <p>WinVinaya Foundation</p>
+            <p>123 Street Name</p>
+            <p>City, Country</p>
+            <p>Email: info@example.com</p>
+            <p>Phone: +1234567890</p>
+            <!-- <h3>Follow Us</h3> -->
+            <br>
+            <ul class="social-links">
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Subscribe</h3>
+            <div>
+                <label>Email</label>
+                <input type="text" placeholder="enter your mail id">
+                <input type="submit" value="Subscribe">
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>Location</h3>
+            <iframe
+                width="100%"
+                height="150"
+                frameborder="0"
+                style="border:0"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.3949280118367!2dYourLongitude!3dYourLatitude!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3AYourPlaceName!2sYourPlaceName!5e0!3m2!1sen!2sus!4v1644248050317!5m2!1sen!2sus"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 <a href="www.winvinaya.com">WinVinaya Infosystems</a>. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- FOoter ends -->
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // CHatbot
+        window.dfMessengerSettings = {
+            "agentId": "wvf-seca",
+            "language": "en" // Change to your agent's language if different
+        };
+        // search and filter
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Get search keyword and filter type
+        let keyword = document.getElementById('search-input').value.toLowerCase();
+        let filter = document.getElementById('filter-select').value;
+
+        // Loop through job items and show/hide based on search and filter
+        let jobItems = document.querySelectorAll('.ag-courses_item');
+        jobItems.forEach(function(item) {
+            let content = item.textContent.toLowerCase();
+            let match = false;
+            if (filter === '' || filter === 'all') {
+                match = content.includes(keyword);
+            } else {
+                match = content.includes(keyword) && content.includes(filter);
+            }
+            item.style.display = match ? 'block' : 'none';
+        });
+    });
+        // typping styles
+        document.addEventListener('DOMContentLoaded', function() {
+            var typingElements = document.querySelectorAll('.typing');
+
+            typingElements.forEach(function(element) {
+                var text = element.innerText;
+                element.innerHTML = ''; // Clear the inner text
+                var i = 0;
+
+                function typeWriter() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, Math.random() * 300); // Adjust typing speed
+                    }
+                }
+
+                typeWriter();
+            });
+        });
+        // typing style ends
+
+        // SLider animation
+            var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            effect: 'fade', // Use fade effect
+            fadeEffect: {
+                crossFade: true
+            },
+            autoplay: {
+                delay: 5000, // Adjust autoplay delay as needed
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+        // Job list script
+        function openModal1(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+        function closeModal1(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+
+        function openModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "none";
+        }
+
+        function toggleFields() {
+            var category = document.getElementById('register-category').value;
+            if (category === 'corporate') {
+                document.getElementById('student-fields').style.display = 'none';
+                document.getElementById('corporate-fields').style.display = 'block';
+            } else {
+                document.getElementById('student-fields').style.display = 'block';
+                document.getElementById('corporate-fields').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
